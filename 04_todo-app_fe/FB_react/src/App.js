@@ -5,46 +5,29 @@ import { DragDropContext } from "react-beautiful-dnd";
 
 function App() {
   const [now, setNow] = useState(new Date());
-
-useEffect(() => {
-  const timer = setInterval(() => setNow(new Date()), 1000);
-  return () => clearInterval(timer);
-}, []);
-  
-  // 초기 할 일: localStorage → 없으면 기본값
-  const [todoData, setTodoData] = useState(() => {
-    try {
-      const saved = localStorage.getItem("todoData");
-      return saved
-        ? JSON.parse(saved)
-        : [
-            { id: "1", title: "공부하기", completed: true, note: "" },
-            { id: "2", title: "청소하기", completed: false, note: "" },
-          ];
-    } catch (e) {
-      console.error(e);
-      return [
-        { id: "1", title: "공부하기", completed: true, note: "" },
-        { id: "2", title: "청소하기", completed: false, note: "" },
-      ];
-    }
-  });
-
+  const [todoData, setTodoData] = useState([]);
   const [value, setValue] = useState("");
 
-  // todoData 변경 시 localStorage 저장
+
   useEffect(() => {
-    try {
-      localStorage.setItem("todoData", JSON.stringify(todoData));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [todoData]);
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/todos")
+      .then((res) => res.json())
+      .then((data) => setTodoData(data))
+      .catch(console.error);
+  }, []);
 
   // 전체 삭제
   const handleRemoveClick = useCallback(() => {
     if (!window.confirm("모든 할 일을 삭제하시겠습니까?")) return;
-    setTodoData([]);
+
+    fetch("http://localhost:5000/todos", {
+      method: "DELETE",
+    }).then(() => setTodoData([]));
   }, []);
 
   // DnD 정렬

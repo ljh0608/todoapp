@@ -1,22 +1,32 @@
-import React from "react";
-import "../App.css";
+import React, { useState } from "react";
 
-function Form({ value, setValue, setTodoData }) {
-  const handleChange = (e) => setValue(e.target.value);
+function Form({ setTodoData }) {
+  const [input, setInput] = useState("");
+
+  const handleChange = (e) => setInput(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const text = value.trim();
+    const text = input.trim();
     if (!text) return;
 
     const newTodo = {
-      id: String(Date.now()),
       title: text,
       completed: false,
+      note: "",
     };
 
-    setTodoData((prev) => [...prev, newTodo]);
-    setValue("");
+    fetch("http://localhost:5000/todos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTodo),
+    })
+      .then((res) => res.json())
+      .then((created) => {
+        setTodoData((prev) => [...prev, created]);
+        setInput("");
+      })
+      .catch((err) => console.error("POST Error:", err));
   };
 
   return (
@@ -25,8 +35,7 @@ function Form({ value, setValue, setTodoData }) {
       className="w-full flex items-center gap-3"
     >
       <textarea
-        type="text"
-        value={value}
+        value={input}
         onChange={handleChange}
         className="w-full px-3 py-2 text-gray-700 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
         placeholder="해야 할 일을 입력하세요."
