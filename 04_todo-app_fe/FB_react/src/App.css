@@ -23,8 +23,8 @@
   color: #fff;
   border: none;
   padding: 5px 9px;
-  borderRadius: 50px;
+  border-radius: 50px;
   cursor: pointer;
-  flast: right;
+  float: right;
 } 
 
