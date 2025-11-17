@@ -10,7 +10,7 @@ function Lists({ todoData, setTodoData }) {
         <div ref={provided.innerRef} {...provided.droppableProps}>
           {todoData.map((data, index) => (
             <List
-              key={data.id}
+              key={data._id}
               data={data}
               index={index}
               todoData={todoData}
