@@ -4,10 +4,9 @@ import Form from "./components/Form";
 import { DragDropContext } from "react-beautiful-dnd";
 
 function App() {
-  const [now, setNow] = useState(new Date());
+  const [, setNow] = useState(new Date());
   const [todoData, setTodoData] = useState([]);
   const [value, setValue] = useState("");
-
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -65,19 +64,24 @@ function App() {
           </span>
           <button
             className="text-xs text-white px-3 py-1 rounded bg-red-200  hover:bg-red-400 hover:text-white"
-            onClick={handleRemoveClick}>
+            onClick={handleRemoveClick}
+          >
             DEL ALL
           </button>
         </h1>
 
         {/* 통계 */}
         <div className="text-sm text-[#c4c7c3] mb-0">
-          <span className="mr-4">전체 : <b>{totalCount}개</b></span>
-          <span className="mr-4">완료 : <b>{completedCount}</b>개</span>
-          <span className="mr-4">남음 : <b>{activeCount}</b>개</span>
+          <span className="mr-4">
+            전체 : <b>{totalCount}개</b>
+          </span>
+          <span className="mr-4">
+            완료 : <b>{completedCount}</b>개
+          </span>
+          <span className="mr-4">
+            남음 : <b>{activeCount}</b>개
+          </span>
         </div>
-
-        
 
         {/* 리스트 영역 (내용이 많으면 카드가 아래로 늘어남) */}
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -86,14 +90,9 @@ function App() {
 
         {/* 입력창: 항상 "흰 카드 안"의 맨 아래 */}
         <div className="mt-6 pt-4 border-t">
-          <Form
-            value={value}
-            setValue={setValue}
-            setTodoData={setTodoData}
-          />
+          <Form value={value} setValue={setValue} setTodoData={setTodoData} />
         </div>
       </div>
-      
     </div>
   );
 }
